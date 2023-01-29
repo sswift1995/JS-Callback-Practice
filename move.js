@@ -1,13 +1,15 @@
 
 function move(element) {
     element.style.position = 'fixed'
+    
 
-    function moveToCoordinates(left, bottom) {
+    function moveToCoordinates(left, bottom, callback) {
         element.style.left = left + 'px'
         element.style.bottom = bottom + 'px'
     }
+    
 
-    function moveWithArrowKeys(left, bottom, _callback){
+    function moveWithArrowKeys(left, bottom,callback){
        console.log("movewithArrowKeys")
         let direction = null;
        let x = left;
@@ -16,7 +18,7 @@ function move(element) {
        element.style.left = x + 'px'
        element.style.bottom = y + 'px'
 
-    }
+    
     
     function moveCharacter(){ 
         if(direction === 'west'){
@@ -33,35 +35,41 @@ function move(element) {
         }
         element.style.left = x + 'px'
         element.style.bottom = y + 'px'
+    
+        document.addEventListener('keyup', function(_e){
+            direction = null
+            callback(direction)
+        })  
+    }
+    setInterval(moveCharacter,1)
+    
+    document.addEventListener('keydown', function(e){
+        if(e.repeat) return;
+    
+        if(e.key === 'ArrowLeft'){
+            direction = 'west'
+        }
+        if(e.key === 'ArrowUp'){
+            direction = 'north'
+        }
+        if(e.key === 'ArrowRight'){
+            direction = 'east'
+        }
+        if(e.key === 'ArrowDown'){
+            direction = 'south'
+        }
+        callback(direction)
+        
+     
+    })
+
     }
     return {
         to: moveToCoordinates,
         withArrowKeys: moveWithArrowKeys
     } 
-    document.addEventListener('keyup', function(e){
-        direction = null
-        callback(direction)
-    })  
+
 }
 
-document.addEventListener('keydown', function(e){
-    if(e.repeat) return;
-
-    if(e.key === 'ArrowLeft'){
-        direction = 'west'
-    }
-    if(e.key === 'ArrowUp'){
-        direction = 'north'
-    }
-    if(e.key === 'ArrowRight'){
-        direction = 'east'
-    }
-    if(e.key === 'ArrowDown'){
-        direction = 'south'
-    }
-    callback(direction)
-    
-   
-})
 
 
